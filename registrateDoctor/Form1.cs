@@ -70,13 +70,16 @@ namespace registrateDoctor
                 temp.client.SNILS = doc[3];
                 temp.client.Polis = doc[4];
                 temp.client.Adress = doc[5];
-                //temp.client.Boring = doc[6];
+                string[] date = doc[6].Split(' ')[0].Split('.');
+                temp.client.Borning = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), 0, 0, 0);
                 temp.doctor.FirstName = doc[7];
                 temp.doctor.SecondName = doc[8];
                 temp.doctor.ThirdName = doc[9];
                 temp.doctor.Type = doc[10];
-                //temp.time = doc[11];
-
+                date = doc[11].Split(' ');
+                string[] time = date[1].Split(':');
+                date = date[0].Split('.');
+                temp.time = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), Convert.ToInt32(time[0]), Convert.ToInt32(time[1]), 0);
                 tempOrders.Add(temp);
                 id++;
             }
@@ -105,12 +108,19 @@ namespace registrateDoctor
                     + order.time.ToString() + '\n');
 
             }
+            writeData.Close();
         }
         public Form1()
         {
             
             Doctors = DownloadBase();
             Orders = DownloadsOrders();
+            foreach(Order order in Orders)
+            {
+                Doctors.Find(x => ((x.FirstName == order.doctor.FirstName)
+                                    && (x.SecondName == order.doctor.SecondName)
+                                    && (x.ThirdName == order.doctor.ThirdName))).OrderTime.Add(order.time);
+            }
             InitializeComponent();
             for(int i = 9; i < 17; i++)
             {
@@ -118,35 +128,86 @@ namespace registrateDoctor
                 Times.Add(new DateTime(1990, 1, 1, i, 30, 0));
             }
         }
+        bool Checked()
+        {
+            bool check = true;
+            if (FirstName.Text == "" || FirstName.Text == "Введите Имя")
+            {
+                FirstName.Text = "Введите Имя";
+                check = false;
+            }
+            if (SecondName.Text == "" || SecondName.Text == "Введите Фамилию")
+            {
+                SecondName.Text = "Введите Фамилию";
+                check = false;
+            }
+            if (ThirdName.Text == "" || ThirdName.Text == "Введите Отчество")
+            {
+                ThirdName.Text = "Введите Отчество";
+                check = false;
+            }
+            if (SNILS.Text == "" || SNILS.Text == "Введите № СНИЛС")
+            {
+                SNILS.Text = "Введите № СНИЛС";
+                check = false;
+            }
+            if (Polis.Text == "" || Polis.Text == "Введите № Полиса")
+            {
+                Polis.Text = "Введите № Полиса";
+                check = false;
+            }
+            if (Type.Text == "" || Type.Text == "Выберите специальность")
+            {
+                Type.Text = "Выберите специальность";
+                check = false;
+            }
+            if (Doctor.Text == "" || Doctor.Text == "Выберите врача")
+            {
+                Doctor.Text = "Выберите врача";
+                check = false;
+            }
+            if (Time.Text == "" || Time.Text == "Выберите время")
+            {
+                Time.Text = "Выберите время";
+                check = false;
+            }
+            return check;
+        }
 
         private void Submit_Click(object sender, EventArgs e)
         {
-            Order tempOrder = new Order();
-            tempOrder.client.FirstName = FirstName.ToString();
-            tempOrder.client.SecondName = SecondName.ToString();
-            tempOrder.client.ThirdName = ThirdName.ToString();
-            tempOrder.client.Borning = BorningDate.Value;
-            tempOrder.client.Adress = Adress.ToString();
-            tempOrder.client.SNILS = SNILS.ToString();
-            tempOrder.client.Polis = Polis.ToString();
+            if (Checked())
+            {
+                Order tempOrder = new Order();
+                tempOrder.client.FirstName = FirstName.Text;
+                tempOrder.client.SecondName = SecondName.Text;
+                tempOrder.client.ThirdName = ThirdName.Text;
+                tempOrder.client.Borning = BorningDate.Value;
+                tempOrder.client.Adress = Adress.Text;
+                tempOrder.client.SNILS = SNILS.Text;
+                tempOrder.client.Polis = Polis.Text;
 
-            tempOrder.doctor.Type = Type.ToString();
-            string[] FIO = Doctor.ToString().Split(' ');
-            tempOrder.doctor.SecondName = FIO[0];
-            tempOrder.doctor.FirstName = FIO[1];
-            tempOrder.doctor.ThirdName = FIO[2];
-            tempOrder.time = new DateTime(Date.Value.Year, 
-                Date.Value.Month, 
-                Date.Value.Day, 
-                Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[0])) * 10 + Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[1])), 
-                Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[3])) * 10 + Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[4])), 
-                0);
-            Orders.Add(tempOrder);
-            UpdateDatabase();
+                tempOrder.doctor.Type = Type.Items[Type.SelectedIndex].ToString();
+                string[] FIO = Doctor.Items[Doctor.SelectedIndex].ToString().Split(' ');
+                tempOrder.doctor.SecondName = FIO[0];
+                tempOrder.doctor.FirstName = FIO[1];
+                tempOrder.doctor.ThirdName = FIO[2];
+                tempOrder.time = new DateTime(Date.Value.Year,
+                    Date.Value.Month,
+                    Date.Value.Day,
+                    Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[0])) * 10 + Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[1])),
+                    Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[3])) * 10 + Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[4])),
+                    0);
+                Orders.Add(tempOrder);
+                UpdateDatabase();
+
+                Application.Exit();
+            }
         }
 
         private void Type_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Doctor.Items.Clear();
             foreach (Doctor x in Doctors)
             {
                 if (x.Type == Type.Items[Type.SelectedIndex].ToString())
@@ -155,6 +216,8 @@ namespace registrateDoctor
                     Doctor.Items.Add(str);
                 }
             }
+            Doctor.Text = "";
+            Time.Text = "";
             
         }
 
@@ -167,12 +230,19 @@ namespace registrateDoctor
                 if ((x.SecondName == FIO[0]) && (x.FirstName == FIO[1]) && (x.ThirdName == FIO[2]))
                     temp = x;
             }
+            Time.Items.Clear();
             foreach(DateTime time in Times)
             {
-                if (!(temp.OrderTime.Any(x => x == time)))
+                if (!(temp.OrderTime.Any(x => x.TimeOfDay == time.TimeOfDay)))
                     Time.Items.Add(time.ToShortTimeString());
 
             }
+            Time.Text = "";
+        }
+
+        private void Exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
     public class Person

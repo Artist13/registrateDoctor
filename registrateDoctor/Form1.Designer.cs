@@ -224,7 +224,6 @@
             this.Type.Name = "Type";
             this.Type.Size = new System.Drawing.Size(441, 21);
             this.Type.TabIndex = 22;
-            this.Type.Text = "Выберите из списка";
             this.Type.SelectedIndexChanged += new System.EventHandler(this.Type_SelectedIndexChanged);
             // 
             // Submit
@@ -245,6 +244,7 @@
             this.Exit.TabIndex = 24;
             this.Exit.Text = "Выход";
             this.Exit.UseVisualStyleBackColor = true;
+            this.Exit.Click += new System.EventHandler(this.Exit_Click);
             // 
             // Doctor
             // 
@@ -271,7 +271,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(663, 454);
+            this.ClientSize = new System.Drawing.Size(663, 391);
             this.Controls.Add(this.Time);
             this.Controls.Add(this.Doctor);
             this.Controls.Add(this.Exit);
