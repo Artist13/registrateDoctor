@@ -12,8 +12,8 @@ using System.Windows;
 
 namespace registrateDoctor
 {
-    
-   
+
+
     public partial class Form1 : Form
     {
         List<Doctor> Doctors;
@@ -21,76 +21,13 @@ namespace registrateDoctor
         List<Order> Orders;
         List<DateTime> Times = new List<DateTime>();
         int CurrentDoctor = 0;
-        List<Doctor> DownloadBase()
-        {
-            List<Doctor> tempDATA = new List<Doctor>();
-            FileStream DATA;
-            try
-            {
-                DATA = new FileStream("data.txt", FileMode.Open, FileAccess.Read);
-            }
-            catch (IOException e)
-            {
-                File.Create("data.txt");
-            }
-            
-            DATA = new FileStream("data.txt", FileMode.Open, FileAccess.Read);
-            StreamReader ReadData = new StreamReader(DATA, Encoding.GetEncoding(1251));
-            string line;
-            int id = 0;
-            while((line = ReadData.ReadLine())!= null)
-            {
-                Doctor temp = new Doctor();
-                string[] doc = line.Split(':');
-                temp.FirstName = doc[0];
-                temp.SecondName = doc[1];
-                temp.ThirdName = doc[2];
-                temp.Type = doc[3];
-                temp.ID = id;
-                tempDATA.Add(temp);
-                id++;
-            }
-            return tempDATA;
-        }
-        List<Order> DownloadsOrders()
-        {
-            List<Order> tempOrders = new List<Order>();
-            FileStream DATA;
-            DATA = new FileStream("orders.txt", FileMode.Open, FileAccess.Read);
-            StreamReader ReadData = new StreamReader(DATA, Encoding.GetEncoding(1251));
-            string line;
-            int id = 0;
-            while ((line = ReadData.ReadLine()) != null)
-            {
-                Order temp = new Order();
-                string[] doc = line.Split(';');
-                temp.client.FirstName = doc[0];
-                temp.client.SecondName = doc[1];
-                temp.client.ThirdName = doc[2];
-                temp.client.SNILS = doc[3];
-                temp.client.Polis = doc[4];
-                temp.client.Adress = doc[5];
-                string[] date = doc[6].Split(' ')[0].Split('.');
-                temp.client.Borning = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), 0, 0, 0);
-                temp.doctor.FirstName = doc[7];
-                temp.doctor.SecondName = doc[8];
-                temp.doctor.ThirdName = doc[9];
-                temp.doctor.Type = doc[10];
-                date = doc[11].Split(' ');
-                string[] time = date[1].Split(':');
-                date = date[0].Split('.');
-                temp.time = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]), Convert.ToInt32(time[0]), Convert.ToInt32(time[1]), 0);
-                tempOrders.Add(temp);
-                id++;
-            }
-            ReadData.Close();
-            return tempOrders;
-        }
+        
+        
         void UpdateDatabase()
         {
             FileStream DATA = new FileStream("orders.txt", FileMode.Create, FileAccess.Write);
             StreamWriter writeData = new StreamWriter(DATA, Encoding.GetEncoding(1251));
-            foreach(Order order in Orders)
+            foreach (Order order in Orders)
             {
 
 
@@ -112,17 +49,27 @@ namespace registrateDoctor
         }
         public Form1()
         {
-            
-            Doctors = DownloadBase();
-            Orders = DownloadsOrders();
-            foreach(Order order in Orders)
+            InitializeComponent();
+            Doctors = new List<Doctor>();
+            Orders = new List<Order>();
+            for (int i = 9; i < 17; i++)
+            {
+                Times.Add(new DateTime(1990, 1, 1, i, 00, 0));
+                Times.Add(new DateTime(1990, 1, 1, i, 30, 0));
+            }
+        }
+        public Form1(List<Doctor> doctors, List<Order> orders)
+        {
+            InitializeComponent();
+            Doctors = doctors;
+            Orders = orders;
+            foreach (Order order in Orders)
             {
                 Doctors.Find(x => ((x.FirstName == order.doctor.FirstName)
                                     && (x.SecondName == order.doctor.SecondName)
                                     && (x.ThirdName == order.doctor.ThirdName))).OrderTime.Add(order.time);
             }
-            InitializeComponent();
-            for(int i = 9; i < 17; i++)
+            for (int i = 9; i < 17; i++)
             {
                 Times.Add(new DateTime(1990, 1, 1, i, 00, 0));
                 Times.Add(new DateTime(1990, 1, 1, i, 30, 0));
@@ -154,6 +101,11 @@ namespace registrateDoctor
             if (Polis.Text == "" || Polis.Text == "Введите № Полиса")
             {
                 Polis.Text = "Введите № Полиса";
+                check = false;
+            }
+            if (Adress.Text == "" || Adress.Text == "Введите Адрес")
+            {
+                Adress.Text = "Введите Адрес";
                 check = false;
             }
             if (Type.Text == "" || Type.Text == "Выберите специальность")
@@ -200,8 +152,10 @@ namespace registrateDoctor
                     0);
                 Orders.Add(tempOrder);
                 UpdateDatabase();
+                Sucess success = new Sucess();
+                success.ShowDialog();
+                Close();
 
-                Application.Exit();
             }
         }
 
@@ -218,20 +172,20 @@ namespace registrateDoctor
             }
             Doctor.Text = "";
             Time.Text = "";
-            
+
         }
 
         private void Doctor_SelectedIndexChanged(object sender, EventArgs e)
         {
             Doctor temp = new Doctor();
             string[] FIO = Doctor.Items[Doctor.SelectedIndex].ToString().Split(' ');
-            foreach(Doctor x in Doctors)
+            foreach (Doctor x in Doctors)
             {
                 if ((x.SecondName == FIO[0]) && (x.FirstName == FIO[1]) && (x.ThirdName == FIO[2]))
                     temp = x;
             }
             Time.Items.Clear();
-            foreach(DateTime time in Times)
+            foreach (DateTime time in Times)
             {
                 if (!(temp.OrderTime.Any(x => x.TimeOfDay == time.TimeOfDay)))
                     Time.Items.Add(time.ToShortTimeString());
@@ -242,61 +196,12 @@ namespace registrateDoctor
 
         private void Exit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Close();
         }
-    }
-    public class Person
-    {
-        public string FirstName;
-        public string SecondName;
-        public string ThirdName;
-        public Person()
-        {
-            FirstName = "";
-            SecondName = "";
-            ThirdName = "";
-        }
-    }
 
-    public class Doctor : Person
-    {
-        public string Type;
-        public int ID;
-        public List<DateTime> OrderTime;
-        public Doctor()
+        private void Form1_Load(object sender, EventArgs e)
         {
-            ID = 0;
-            Type = "";
-            OrderTime = new List<DateTime>();
+
         }
     }
-    public class Client : Person
-    {
-        public int ID;
-        public string SNILS;
-        public string Polis;
-        public string Adress;
-        public DateTime Borning;
-        public Client()
-        {
-            Borning = new DateTime(1990, 1, 1, 0, 0, 0);
-            ID = 0;
-            SNILS = "";
-            Polis = "";
-            Adress = "";
-        }
-    }
-    public class Order
-    {
-        public Client client;
-        public Doctor doctor;
-        public DateTime time;
-        public Order()
-        {
-            client = new Client();
-            doctor = new Doctor();
-            time = new DateTime(1990, 1, 1, 0, 0, 0);
-        }
-    }
-    
 }

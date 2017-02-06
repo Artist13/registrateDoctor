@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.SecondName = new System.Windows.Forms.TextBox();
             this.FirstName = new System.Windows.Forms.TextBox();
             this.ThirdName = new System.Windows.Forms.TextBox();
@@ -52,9 +51,7 @@
             this.Submit = new System.Windows.Forms.Button();
             this.Exit = new System.Windows.Forms.Button();
             this.Doctor = new System.Windows.Forms.ComboBox();
-            this.doctorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.Time = new System.Windows.Forms.ComboBox();
-            ((System.ComponentModel.ISupportInitialize)(this.doctorBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // SecondName
@@ -110,7 +107,7 @@
             this.BorningDate.Location = new System.Drawing.Point(424, 30);
             this.BorningDate.Name = "BorningDate";
             this.BorningDate.Size = new System.Drawing.Size(200, 20);
-            this.BorningDate.TabIndex = 6;
+            this.BorningDate.TabIndex = 3;
             this.BorningDate.Value = new System.DateTime(1990, 1, 1, 0, 0, 0, 0);
             // 
             // LabelBorningDate
@@ -145,14 +142,14 @@
             this.SNILS.Location = new System.Drawing.Point(424, 56);
             this.SNILS.Name = "SNILS";
             this.SNILS.Size = new System.Drawing.Size(200, 20);
-            this.SNILS.TabIndex = 10;
+            this.SNILS.TabIndex = 4;
             // 
             // Polis
             // 
             this.Polis.Location = new System.Drawing.Point(424, 82);
             this.Polis.Name = "Polis";
             this.Polis.Size = new System.Drawing.Size(200, 20);
-            this.Polis.TabIndex = 11;
+            this.Polis.TabIndex = 5;
             // 
             // LabelAdress
             // 
@@ -168,7 +165,7 @@
             this.Adress.Location = new System.Drawing.Point(90, 130);
             this.Adress.Name = "Adress";
             this.Adress.Size = new System.Drawing.Size(534, 20);
-            this.Adress.TabIndex = 13;
+            this.Adress.TabIndex = 6;
             // 
             // LabelDoctor
             // 
@@ -211,7 +208,7 @@
             this.Date.Location = new System.Drawing.Point(183, 232);
             this.Date.Name = "Date";
             this.Date.Size = new System.Drawing.Size(441, 20);
-            this.Date.TabIndex = 18;
+            this.Date.TabIndex = 9;
             // 
             // Type
             // 
@@ -223,7 +220,7 @@
             this.Type.Location = new System.Drawing.Point(183, 183);
             this.Type.Name = "Type";
             this.Type.Size = new System.Drawing.Size(441, 21);
-            this.Type.TabIndex = 22;
+            this.Type.TabIndex = 7;
             this.Type.SelectedIndexChanged += new System.EventHandler(this.Type_SelectedIndexChanged);
             // 
             // Submit
@@ -231,7 +228,7 @@
             this.Submit.Location = new System.Drawing.Point(362, 351);
             this.Submit.Name = "Submit";
             this.Submit.Size = new System.Drawing.Size(167, 23);
-            this.Submit.TabIndex = 23;
+            this.Submit.TabIndex = 11;
             this.Submit.Text = "Зарегистрироваться";
             this.Submit.UseVisualStyleBackColor = true;
             this.Submit.Click += new System.EventHandler(this.Submit_Click);
@@ -241,7 +238,7 @@
             this.Exit.Location = new System.Drawing.Point(549, 351);
             this.Exit.Name = "Exit";
             this.Exit.Size = new System.Drawing.Size(75, 23);
-            this.Exit.TabIndex = 24;
+            this.Exit.TabIndex = 12;
             this.Exit.Text = "Выход";
             this.Exit.UseVisualStyleBackColor = true;
             this.Exit.Click += new System.EventHandler(this.Exit_Click);
@@ -252,12 +249,8 @@
             this.Doctor.Location = new System.Drawing.Point(183, 208);
             this.Doctor.Name = "Doctor";
             this.Doctor.Size = new System.Drawing.Size(441, 21);
-            this.Doctor.TabIndex = 25;
+            this.Doctor.TabIndex = 8;
             this.Doctor.SelectedIndexChanged += new System.EventHandler(this.Doctor_SelectedIndexChanged);
-            // 
-            // doctorBindingSource
-            // 
-            this.doctorBindingSource.DataSource = typeof(registrateDoctor.Doctor);
             // 
             // Time
             // 
@@ -265,7 +258,7 @@
             this.Time.Location = new System.Drawing.Point(183, 256);
             this.Time.Name = "Time";
             this.Time.Size = new System.Drawing.Size(441, 21);
-            this.Time.TabIndex = 26;
+            this.Time.TabIndex = 10;
             // 
             // Form1
             // 
@@ -298,7 +291,7 @@
             this.Controls.Add(this.SecondName);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.doctorBindingSource)).EndInit();
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -329,7 +322,6 @@
         private System.Windows.Forms.Button Submit;
         private System.Windows.Forms.Button Exit;
         private System.Windows.Forms.ComboBox Doctor;
-        private System.Windows.Forms.BindingSource doctorBindingSource;
         private System.Windows.Forms.ComboBox Time;
     }
 }
