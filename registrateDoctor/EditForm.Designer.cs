@@ -50,6 +50,7 @@
             this.ThirdName = new System.Windows.Forms.TextBox();
             this.FirstName = new System.Windows.Forms.TextBox();
             this.SecondName = new System.Windows.Forms.TextBox();
+            this.Accept = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Time
@@ -67,6 +68,7 @@
             this.Doctor.Name = "Doctor";
             this.Doctor.Size = new System.Drawing.Size(441, 21);
             this.Doctor.TabIndex = 47;
+            this.Doctor.SelectedIndexChanged += new System.EventHandler(this.Doctor_SelectedIndexChanged);
             // 
             // Type
             // 
@@ -75,10 +77,11 @@
             "Терапевт",
             "Хирург",
             "Акушер-гинеколог"});
-            this.Type.Location = new System.Drawing.Point(183, 176);
+            this.Type.Location = new System.Drawing.Point(183, 171);
             this.Type.Name = "Type";
             this.Type.Size = new System.Drawing.Size(441, 21);
             this.Type.TabIndex = 46;
+            this.Type.SelectedIndexChanged += new System.EventHandler(this.Type_SelectedIndexChanged);
             // 
             // Date
             // 
@@ -236,11 +239,22 @@
             this.SecondName.Size = new System.Drawing.Size(178, 20);
             this.SecondName.TabIndex = 27;
             // 
+            // Accept
+            // 
+            this.Accept.Location = new System.Drawing.Point(484, 298);
+            this.Accept.Name = "Accept";
+            this.Accept.Size = new System.Drawing.Size(128, 39);
+            this.Accept.TabIndex = 49;
+            this.Accept.Text = "Применить";
+            this.Accept.UseVisualStyleBackColor = true;
+            this.Accept.Click += new System.EventHandler(this.Accept_Click);
+            // 
             // EditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(695, 360);
+            this.Controls.Add(this.Accept);
             this.Controls.Add(this.Time);
             this.Controls.Add(this.Doctor);
             this.Controls.Add(this.Type);
@@ -295,5 +309,6 @@
         private System.Windows.Forms.TextBox ThirdName;
         private System.Windows.Forms.TextBox FirstName;
         private System.Windows.Forms.TextBox SecondName;
+        private System.Windows.Forms.Button Accept;
     }
 }

@@ -61,6 +61,7 @@
             this.Controls.Add(this.Regisration);
             this.Name = "StartPage";
             this.Text = "StartPage";
+            this.Load += new System.EventHandler(this.StartPage_Load);
             this.ResumeLayout(false);
 
         }

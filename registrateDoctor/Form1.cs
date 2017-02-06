@@ -16,18 +16,14 @@ namespace registrateDoctor
 
     public partial class Form1 : Form
     {
-        List<Doctor> Doctors;
-        List<Client> Clients;
-        List<Order> Orders;
-        List<DateTime> Times = new List<DateTime>();
-        int CurrentDoctor = 0;
+        
         
         
         void UpdateDatabase()
         {
             FileStream DATA = new FileStream("orders.txt", FileMode.Create, FileAccess.Write);
             StreamWriter writeData = new StreamWriter(DATA, Encoding.GetEncoding(1251));
-            foreach (Order order in Orders)
+            foreach (Order order in StartPage.Orders)
             {
 
 
@@ -50,30 +46,6 @@ namespace registrateDoctor
         public Form1()
         {
             InitializeComponent();
-            Doctors = new List<Doctor>();
-            Orders = new List<Order>();
-            for (int i = 9; i < 17; i++)
-            {
-                Times.Add(new DateTime(1990, 1, 1, i, 00, 0));
-                Times.Add(new DateTime(1990, 1, 1, i, 30, 0));
-            }
-        }
-        public Form1(List<Doctor> doctors, List<Order> orders)
-        {
-            InitializeComponent();
-            Doctors = doctors;
-            Orders = orders;
-            foreach (Order order in Orders)
-            {
-                Doctors.Find(x => ((x.FirstName == order.doctor.FirstName)
-                                    && (x.SecondName == order.doctor.SecondName)
-                                    && (x.ThirdName == order.doctor.ThirdName))).OrderTime.Add(order.time);
-            }
-            for (int i = 9; i < 17; i++)
-            {
-                Times.Add(new DateTime(1990, 1, 1, i, 00, 0));
-                Times.Add(new DateTime(1990, 1, 1, i, 30, 0));
-            }
         }
         bool Checked()
         {
@@ -150,7 +122,11 @@ namespace registrateDoctor
                     Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[0])) * 10 + Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[1])),
                     Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[3])) * 10 + Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[4])),
                     0);
-                Orders.Add(tempOrder);
+                StartPage.Orders.Add(tempOrder);
+                StartPage.Doctors.Find(x => (x.Type == tempOrder.doctor.Type)
+                                       && (x.SecondName == tempOrder.doctor.SecondName)
+                                       && (x.FirstName == tempOrder.doctor.FirstName)
+                                       && (x.ThirdName == tempOrder.doctor.ThirdName)).OrderTime.Add(tempOrder.time);
                 UpdateDatabase();
                 Sucess success = new Sucess();
                 success.ShowDialog();
@@ -162,7 +138,7 @@ namespace registrateDoctor
         private void Type_SelectedIndexChanged(object sender, EventArgs e)
         {
             Doctor.Items.Clear();
-            foreach (Doctor x in Doctors)
+            foreach (Doctor x in StartPage.Doctors)
             {
                 if (x.Type == Type.Items[Type.SelectedIndex].ToString())
                 {
@@ -179,13 +155,13 @@ namespace registrateDoctor
         {
             Doctor temp = new Doctor();
             string[] FIO = Doctor.Items[Doctor.SelectedIndex].ToString().Split(' ');
-            foreach (Doctor x in Doctors)
+            foreach (Doctor x in StartPage.Doctors)
             {
                 if ((x.SecondName == FIO[0]) && (x.FirstName == FIO[1]) && (x.ThirdName == FIO[2]))
                     temp = x;
             }
             Time.Items.Clear();
-            foreach (DateTime time in Times)
+            foreach (DateTime time in StartPage.Times)
             {
                 if (!(temp.OrderTime.Any(x => x.TimeOfDay == time.TimeOfDay)))
                     Time.Items.Add(time.ToShortTimeString());
@@ -201,7 +177,7 @@ namespace registrateDoctor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
         }
     }
 }

@@ -13,16 +13,28 @@ namespace registrateDoctor
 {
     public partial class StartPage : Form
     {
-        List<Doctor> Doctors;
-        List<Client> Clients;
-        List<Order> Orders;
+        static public List<Doctor> Doctors;
+        static public List<Client> Clients;
+        static public List<Order> Orders;
+        static public List<DateTime> Times = new List<DateTime>();
         public StartPage()
         {
+            InitializeComponent();
             Doctors = DownloadBase();
             Orders = DownloadsOrders();
-            InitializeComponent();
+            for (int i = 9; i < 17; i++)
+            {
+                Times.Add(new DateTime(1990, 1, 1, i, 00, 0));
+                Times.Add(new DateTime(1990, 1, 1, i, 30, 0));
+            }
+            foreach (Order order in Orders)
+            {
+                Doctors.Find(x => ((x.FirstName == order.doctor.FirstName)
+                                    && (x.SecondName == order.doctor.SecondName)
+                                    && (x.ThirdName == order.doctor.ThirdName))).OrderTime.Add(order.time);
+            }
         }
-        List<Doctor> DownloadBase()
+        public List<Doctor> DownloadBase()
         {
             List<Doctor> tempDATA = new List<Doctor>();
             FileStream DATA;
@@ -82,7 +94,7 @@ namespace registrateDoctor
         }
         private void Regisration_Click(object sender, EventArgs e)
         {
-            Form1 newForm = new Form1(Doctors, Orders);
+            Form1 newForm = new Form1();
             Hide();
             newForm.ShowDialog();
             Show();
@@ -90,11 +102,16 @@ namespace registrateDoctor
 
         private void Edit_Click(object sender, EventArgs e)
         {
-            EditList newForm = new EditList(Orders);
+            EditList newForm = new EditList();
             Hide();
             newForm.ShowDialog();
             Orders = DownloadsOrders();
             this.Show();
+        }
+
+        private void StartPage_Load(object sender, EventArgs e)
+        {
+            
         }
     }
     public class Person

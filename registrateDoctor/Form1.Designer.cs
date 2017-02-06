@@ -229,7 +229,7 @@
             this.Submit.Name = "Submit";
             this.Submit.Size = new System.Drawing.Size(167, 23);
             this.Submit.TabIndex = 11;
-            this.Submit.Text = "Зарегистрироваться";
+            this.Submit.Text = "Принять";
             this.Submit.UseVisualStyleBackColor = true;
             this.Submit.Click += new System.EventHandler(this.Submit_Click);
             // 

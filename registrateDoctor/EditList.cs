@@ -13,25 +13,17 @@ namespace registrateDoctor
 {
     public partial class EditList : Form
     {
-        public List<Order> Orders;
         public EditList()
         {
             InitializeComponent();
-            Orders = new List<Order>();
         }
-        public EditList(List<Order> orders)
-        {
-            InitializeComponent();
-            Orders = orders;
-        }
-
         private void EditList_Load(object sender, EventArgs e)
         {
             OrderList.View = View.Details;
             OrderList.Columns.Add("Дата", 150);
             OrderList.Columns.Add("Имя пациента", 300);
             OrderList.Columns.Add("Врач", 300);
-            foreach (Order order in Orders)
+            foreach (Order order in StartPage.Orders)
             {
                 ListViewItem item = new ListViewItem(order.time.ToString());
                 item.SubItems.Add(order.client.SecondName + ' ' + order.client.FirstName + ' ' + order.client.ThirdName);
@@ -48,10 +40,22 @@ namespace registrateDoctor
 
         private void EditItem_Click(object sender, EventArgs e)
         {
-            Order currentOrder = Orders.Find(x => ((x.time.ToString() == OrderList.SelectedItems[0].SubItems[0].Text) &&
+            Order currentOrder = StartPage.Orders.Find(x => ((x.time.ToString() == OrderList.SelectedItems[0].SubItems[0].Text) &&
                                                     (x.doctor.Type == OrderList.SelectedItems[0].SubItems[2].Text.Split(' ')[0])));
-            EditForm newForm = new EditForm(currentOrder);//прописать изменение всех полей
+            EditForm newForm = new EditForm(currentOrder);
             newForm.ShowDialog();
+            OrderList.Clear();
+            OrderList.View = View.Details;
+            OrderList.Columns.Add("Дата", 150);
+            OrderList.Columns.Add("Имя пациента", 300);
+            OrderList.Columns.Add("Врач", 300);
+            foreach (Order order in StartPage.Orders)
+            {
+                ListViewItem item = new ListViewItem(order.time.ToString());
+                item.SubItems.Add(order.client.SecondName + ' ' + order.client.FirstName + ' ' + order.client.ThirdName);
+                item.SubItems.Add(order.doctor.Type + ' ' + order.doctor.SecondName + ' ' + order.doctor.FirstName + ' ' + order.doctor.ThirdName);
+                OrderList.Items.Add(item);
+            }
         }
 
         private void DeleteItem_Click(object sender, EventArgs e)
@@ -69,12 +73,12 @@ namespace registrateDoctor
             List<Order> orders = new List<Order>();
             foreach (ListViewItem item in OrderList.Items)
             {
-                orders.Add(Orders.Find(x => ((x.time.ToString() == item.SubItems[0].Text) && (x.doctor.Type == item.SubItems[2].Text.Split(' ')[0]))));
+                orders.Add(StartPage.Orders.Find(x => ((x.time.ToString() == item.SubItems[0].Text) && (x.doctor.Type == item.SubItems[2].Text.Split(' ')[0]))));
             }
-            Orders = orders;
+            StartPage.Orders = orders;
             FileStream DATA = new FileStream("orders.txt", FileMode.Create, FileAccess.Write);
             StreamWriter writeData = new StreamWriter(DATA, Encoding.GetEncoding(1251));
-            foreach (Order order in Orders)
+            foreach (Order order in StartPage.Orders)
             {
 
 
