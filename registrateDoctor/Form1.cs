@@ -116,12 +116,13 @@ namespace registrateDoctor
                 tempOrder.doctor.SecondName = FIO[0];
                 tempOrder.doctor.FirstName = FIO[1];
                 tempOrder.doctor.ThirdName = FIO[2];
+                FIO = Time.SelectedItem.ToString().Split(':');
                 tempOrder.time = new DateTime(Date.Value.Year,
-                    Date.Value.Month,
-                    Date.Value.Day,
-                    Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[0])) * 10 + Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[1])),
-                    Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[3])) * 10 + Convert.ToInt32(Convert.ToString(Time.Items[Time.SelectedIndex].ToString()[4])),
-                    0);
+                                            Date.Value.Month,
+                                            Date.Value.Day,
+                                            Convert.ToInt32(FIO[0]),
+                                            Convert.ToInt32(FIO[1]),
+                                            0);
                 StartPage.Orders.Add(tempOrder);
                 StartPage.Doctors.Find(x => (x.Type == tempOrder.doctor.Type)
                                        && (x.SecondName == tempOrder.doctor.SecondName)
