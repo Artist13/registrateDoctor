@@ -48,7 +48,10 @@ namespace registrateDoctor
 
         private void EditItem_Click(object sender, EventArgs e)
         {
-            EditForm newForm = new EditForm();//прописать изменение всех полей
+            Order currentOrder = Orders.Find(x => ((x.time.ToString() == OrderList.SelectedItems[0].SubItems[0].Text) &&
+                                                    (x.doctor.Type == OrderList.SelectedItems[0].SubItems[2].Text.Split(' ')[0])));
+            EditForm newForm = new EditForm(currentOrder);//прописать изменение всех полей
+            newForm.ShowDialog();
         }
 
         private void DeleteItem_Click(object sender, EventArgs e)

@@ -265,6 +265,7 @@
             this.Controls.Add(this.SecondName);
             this.Name = "EditForm";
             this.Text = "EditForm";
+            this.Load += new System.EventHandler(this.EditForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
